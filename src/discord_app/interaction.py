@@ -7,6 +7,7 @@ from . import discord_types
 from . import channel
 from . import user as user_module
 from . import guild as guild_module
+from . import application
 
 
 @dataclass
@@ -312,7 +313,7 @@ class InteractionRequest(discord_types.DiscordDataClass):
     guild_locale: Optional[str] = None
 
     # Internal use only
-    _app: Optional[Any] = None
+    _app: Optional['application.Application'] = None
 
     def __post_init__(self) -> None:
         if isinstance(self.type, int):
