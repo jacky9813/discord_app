@@ -84,7 +84,7 @@ class Guild(PartialGuild):
     large: Optional[bool] = None
     unavailable: Optional[bool] = None
     member_count: Optional[int] = None
-    voice_states: Optional[List[voice.VoiceState]] = None
+    voice_states: Optional[List[voice.PartialVoiceState]] = None
     members: Optional[List['GuildMember']] = None
     threads: Optional[List[channel.Channel]] = None
     presences: Optional[List[Any]] = None

@@ -21,3 +21,6 @@ class VoiceState(discord_types.DiscordDataClass):
     guild_id: Optional[discord_types.Snowflake] = None
     member: Optional['guild_module.GuildMember'] = None
     self_stream: Optional[bool] = None
+
+
+PartialVoiceState = VoiceState
