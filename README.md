@@ -1,6 +1,6 @@
 # Discord Interaction Application framework for Python
 
-![Tests](https://github.com/jacky9813/discord_app/actions/workflows/tests.yaml/badge.svg)
+![Tests](https://github.com/jacky9813/discord_app/actions/workflows/tests.yaml/badge.svg) [![Pypi](https://badge.fury.io/py/discord-app.svg)](https://pypi.org/project/discord-app/)
 
 > In early development.
 > 
@@ -20,7 +20,7 @@ A [Flask](https://flask.palletsprojects.com/) based Discord Application framewor
 Install and update using [pip](https://pip.pypa.io/en/stable/getting-started/):
 
 ```bash
- $ pip install discord_app
+ $ pip install discord-app
 ```
 
 ## Known Limitation
