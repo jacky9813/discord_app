@@ -13,12 +13,22 @@ A [Flask](https://flask.palletsprojects.com/) based Discord Application framewor
 * Python 3.7+
 * (Recommended) [virtualenv](https://virtualenv.pypa.io/en/latest/)
 
+## Install from PyPI
+
+Install and update using [pip](https://pip.pypa.io/en/stable/getting-started/):
+
+```bash
+ $ pip install discord_app
+```
+
 ## Known Limitation
 
 * After command specification updated (including new command), Discord clients may require up to an hour to update its command list.
 
 ## Sample Server Application
 ```python
+#!/usr/bin/env python3
+# app.py
 import discord_app
 
 from . import app_config
@@ -63,6 +73,10 @@ app.run(
     host="0.0.0.0",
     port=PORT
 )
+```
+
+```bash
+ $ python3 app.py
 ```
 
 ## Links
