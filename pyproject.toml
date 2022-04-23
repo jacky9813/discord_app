@@ -30,13 +30,12 @@ Flask = "^2.1.1"
 PyNaCl = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^3.9.2"
-tox = "^3.24.3"
-pytest = "^6.2.5"
-pytest-cov = "^2.12.1"
-mypy = "^0.910"
-types-requests = "^2.27.17"
-sphinx = "^4.5.0"
+flake8 = "^4.0.1"
+tox = "^3.25.0"
+pytest = "^7.1.1"
+pytest-cov = "^3.0.0"
+mypy = "^0.942"
+types-requests = "^2.27.20"
 
 [tool.pytest.ini_options]
 addopts = "--cov=src/discord_app"
