@@ -13,6 +13,10 @@ A [Flask](https://flask.palletsprojects.com/) based Discord Application framewor
 * Python 3.7+
 * (Recommended) [virtualenv](https://virtualenv.pypa.io/en/latest/)
 
+## Known Limitation
+
+* After command specification updated (including new command), Discord clients may require up to an hour to update its command list.
+
 ## Sample Server Application
 ```python
 import discord_app
