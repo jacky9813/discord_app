@@ -4,7 +4,7 @@ from typing import Optional, List, Tuple
 
 from . import emoji as emoji_module
 from . import discord_types
-from . import user
+from . import user as user_module
 
 
 @dataclass
@@ -91,7 +91,7 @@ class ClientStatus(discord_types.DiscordDataClass):
 
 @dataclass
 class PresenceUpdateEvent(discord_types.DiscordDataClass):
-    user: user.User
+    user: 'user_module.User'
     guild_id: discord_types.Snowflake
     status: str
     activities: List[Activity]
@@ -99,7 +99,7 @@ class PresenceUpdateEvent(discord_types.DiscordDataClass):
 
     def __post_init__(self) -> None:
         if isinstance(self.user, dict):
-            self.user = user.User(**self.user)  # type: ignore[unreachable]
+            self.user = user_module.User(**self.user)  # type: ignore[unreachable]
         if isinstance(self.activities, list):
             self.activities = [
                 Activity(**a) if isinstance(a, dict) else a

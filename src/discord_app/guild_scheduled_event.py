@@ -23,7 +23,7 @@ class GuildScheduledEvent(discord_types.DiscordDataClass):
     entity_type: discord_types.GuildScheduledEventEntityType
     creator_id: Optional[discord_types.Snowflake] = None
     description: Optional[str] = None
-    creator: Optional[user_module.User] = None
+    creator: Optional['user_module.User'] = None
     user_count: Optional[int] = None
     image: Optional[str] = None
 
@@ -38,5 +38,5 @@ class GuildScheduledEvent(discord_types.DiscordDataClass):
 @dataclass
 class GuildScheduledEventUser(discord_types.DiscordDataClass):
     guild_scheduled_event_id: discord_types.Snowflake
-    user: user_module.User
-    member: Optional[guild_module.GuildMember]
+    user: 'user_module.User'
+    member: Optional['guild_module.GuildMember']
