@@ -17,6 +17,12 @@ class InviteStageInstance(discord_types.DiscordDataClass):
     speaker_count: int
     topic: str
 
+    def __post_init__(self) -> None:
+        self.members = [
+            guild_module.PartialGuildMember(**m) if isinstance(m, dict) else m
+            for m in self.members
+        ]
+
 
 @dataclass
 class Invite(discord_types.DiscordDataClass):
@@ -32,6 +38,24 @@ class Invite(discord_types.DiscordDataClass):
     expires_at: Optional[str] = None
     stage_instance: Optional[InviteStageInstance] = None
     guild_scheduled_event: Optional[gse_module.GuildScheduledEvent] = None
+
+    def __post_init__(self) -> None:
+        if isinstance(self.channel, dict):
+            self.channel = channel_module.PartialChannel(**self.channel)  # type: ignore[unreachable]
+        if isinstance(self.guild, dict):
+            self.guild = guild_module.PartialGuild(**self.guild)  # type: ignore[unreachable]
+        if isinstance(self.inviter, dict):
+            self.inviter = user_module.User(**self.inviter)  # type: ignore[unreachable]
+        if isinstance(self.target_type, int):
+            self.target_type = discord_types.InviteTargetType(self.target_type)
+        if isinstance(self.target_user, dict):
+            self.target_user = user_module.User(**self.target_user)  # type: ignore[unreachable]
+        if isinstance(self.target_application, dict):
+            self.target_application = application_module.PartialApplication(**self.target_application)  # type: ignore[unreachable]
+        if isinstance(self.stage_instance, dict):
+            self.stage_instance = InviteStageInstance(**self.stage_instance)  # type: ignore[unreachable]
+        if isinstance(self.guild_scheduled_event, dict):
+            self.guild_scheduled_event = gse_module.GuildScheduledEvent(**self.guild_scheduled_event)  # type: ignore[unreachable]
 
 
 @dataclass
