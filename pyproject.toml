@@ -2,7 +2,7 @@
 requires = [
     "poetry-core>=1.0.0"
 ]
-build-backend = "poetry.core.masonry"
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "discord_app"
@@ -61,9 +61,37 @@ no_implicit_reexport = true
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py37, py38, py39, py310
+minversion=3.20.0
+envlist = py37, py38, py39, py310, flake8, mypy
+isolated_build = true
+
+[gh-actions]
+python = 
+    3.7: py37
+    3.8: py38
+    3.9: py39, mypy, flake8
+    3.10: py310
+
+[tox:.package]
+basepython = python3
 
 [testenv]
-deps = pytest >= 7.1.1
-commands = pytest
+setenv = 
+    PYTHONPATH = {toxinidir}
+deps = 
+    -r{toxinidir}/requirements_dev.txt
+commands = 
+    pytest --basetemp={envtmpdir}
+passenv = *
+
+[testenv:flake8]
+basepython = python3.9
+deps = flake8
+commands = flake8 src
+
+[testenv:mypy]
+basepython = python3.9
+deps = 
+    -r{toxinidir}/requirements_dev.txt
+commands = mypy src
 """

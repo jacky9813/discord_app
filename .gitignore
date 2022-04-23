@@ -8,3 +8,4 @@ app_config.py
 .pytest_cache
 run-test.sh
 dist
+.tox
