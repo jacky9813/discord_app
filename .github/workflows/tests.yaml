@@ -6,6 +6,7 @@ on:
 
 jobs:
   test:
+    environment: TEST_ENV
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
