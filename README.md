@@ -1,5 +1,7 @@
 # Discord Interaction Application framework for Python
 
+![Tests](https://github.com/jacky9813/discord_app/actions/workflows/tests.yaml/badge.svg)
+
 > In early development.
 > 
 > The specification and documentation may change without notification.
