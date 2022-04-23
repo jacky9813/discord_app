@@ -1,5 +1,5 @@
 
-import discord_app.command
+import discord_app.interaction
 import discord_app.application
 import discord_app.discord_types
 
@@ -48,29 +48,29 @@ def test_command_1() -> None:
         ]
     }
 
-    a = discord_app.command.ApplicationCommand(**spec)  # type: ignore[arg-type]
+    a = discord_app.interaction.ApplicationCommand(**spec)  # type: ignore[arg-type]
     b = dataclasses.asdict(a, dict_factory=discord_app.application.asdict_ignore_none)
-    c = discord_app.command.ApplicationCommand(**b)
+    c = discord_app.interaction.ApplicationCommand(**b)
 
     assert a == c
     assert a.type is discord_app.discord_types.ApplicationCommandType.CHAT_INPUT
-    assert type(a.options[0]) == discord_app.command.ApplicationCommandOption  # type: ignore[index]
-    assert type(a.options[0].choices[0]) == discord_app.command.ApplicationCommandOptionChoice  # type: ignore[index]
+    assert type(a.options[0]) == discord_app.interaction.ApplicationCommandOption  # type: ignore[index]
+    assert type(a.options[0].choices[0]) == discord_app.interaction.ApplicationCommandOptionChoice  # type: ignore[index]
 
 
 def test_command_2() -> None:
-    a = discord_app.command.ApplicationCommandOption(
+    a = discord_app.interaction.ApplicationCommandOption(
         name="Option",
         description="option group test",
         type=discord_app.discord_types.ApplicationCommandOptionType.SUB_COMMAND,
         required=True,
         options=[
-            discord_app.command.ApplicationCommandOption(
+            discord_app.interaction.ApplicationCommandOption(
                 name="Sub_Option",
                 description="sub option test",
                 type=discord_app.discord_types.ApplicationCommandOptionType.STRING
             ),
-            discord_app.command.ApplicationCommandOption(
+            discord_app.interaction.ApplicationCommandOption(
                 name="Sub channel option",
                 description="channel as an option",
                 type=discord_app.discord_types.ApplicationCommandOptionType.CHANNEL,
@@ -81,7 +81,7 @@ def test_command_2() -> None:
             )
         ]
     )
-    b = discord_app.command.ApplicationCommandOption(**{
+    b = discord_app.interaction.ApplicationCommandOption(**{  # type: ignore[arg-type]
         "name": "Option",
         "description": "option group test",
         "type": 1,
@@ -91,7 +91,7 @@ def test_command_2() -> None:
                 "name": "Sub_Option",
                 "description": "sub option test",
                 "type": 3
-            },{
+            }, {
                 "name": "Sub channel option",
                 "description": "channel as an option",
                 "type": 7,
@@ -100,7 +100,7 @@ def test_command_2() -> None:
         ]
     })
 
-    c = discord_app.command.ApplicationCommandOption(**{
+    c = discord_app.interaction.ApplicationCommandOption(**{  # type: ignore[arg-type]
         "name": "Option",
         "description": "option group test",
         "type": 1,
@@ -110,7 +110,7 @@ def test_command_2() -> None:
                 "name": "Sub_Option",
                 "description": "sub option test",
                 "type": 3
-            },{
+            }, {
                 "name": "Sub channel option",
                 "description": "channel as an option",
                 "type": 7,
