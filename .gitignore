@@ -7,3 +7,4 @@ app_config.py
 .coverage
 .pytest_cache
 run-test.sh
+dist
