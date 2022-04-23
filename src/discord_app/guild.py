@@ -10,6 +10,7 @@ from . import voice
 from . import sticker
 from . import stage_instance
 from . import guild_scheduled_event
+from . import presence
 
 
 @dataclass
@@ -122,7 +123,7 @@ class Guild(PartialGuild):
     voice_states: Optional[List[voice.PartialVoiceState]] = None
     members: Optional[List['GuildMember']] = None
     threads: Optional[List[channel.Channel]] = None
-    presences: Optional[List[Any]] = None
+    presences: Optional[List[presence.PresenceUpdateEvent]] = None
     max_presences: Optional[int] = None
     max_members: Optional[int] = None
     premium_subscription_count: Optional[int] = None
@@ -178,6 +179,11 @@ class Guild(PartialGuild):
             self.guild_scheduled_events = [
                 guild_scheduled_event.GuildScheduledEvent(**gse) if isinstance(gse, dict) else gse
                 for gse in self.guild_scheduled_events
+            ]
+        if isinstance(self.presences, list):
+            self.presences = [
+                presence.PresenceUpdateEvent(**p) if isinstance(p, dict) else p
+                for p in self.presences
             ]
 
 
@@ -250,7 +256,7 @@ class PartialGuildMember(discord_types.DiscordDataClass):
     permissions: Optional[str] = None
     communication_disabled_until: Optional[str] = None
 
-    # The following attributes are undocumented
+    # The following attributes are undocumented in Discord API documentation
     flags: Optional[Any] = None
     is_pending: Optional[Any] = None
 
