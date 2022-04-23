@@ -94,7 +94,7 @@ class InteractionResponseData(discord_types.DiscordDataClass):
         if cls is InteractionResponseData:
             return super(InteractionResponseData, target).__new__(target, *args, **kwargs)  # type: ignore[call-arg, no-any-return]
         else:
-            return super(InteractionResponseData, cls).__new__(cls)  # type: ignore[no-any-return]
+            return super(InteractionResponseData, cls).__new__(cls)  # type: ignore[return-value]
 
 
 @dataclass
