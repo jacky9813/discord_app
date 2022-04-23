@@ -9,6 +9,7 @@ from . import user as user_module
 from . import emoji as emoji_module
 from . import channel
 from . import sticker
+from . import application as application_module
 
 
 @dataclass
@@ -390,7 +391,7 @@ class Message(discord_types.DiscordDataClass):
     reactions: Optional[List[Reaction]] = None
     nonce: Optional[Union[int, str]] = None
     activity: Optional[MessageActivity] = None
-    application: Optional[Any] = None
+    application: Optional['application_module.PartialApplication'] = None
     application_id: Optional[discord_types.Snowflake] = None
     message_reference: Optional[MessageReference] = None
     flags: Optional[discord_types.MessageFlags] = None
