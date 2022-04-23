@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.7,<4"
 requests = "^2.27.1"
 Flask = "^2.1.1"
 PyNaCl = "^1.4.0"
@@ -57,3 +57,13 @@ warn_return_any = true
 warn_unreachable = true
 warn_unused_configs = true
 no_implicit_reexport = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py37, py38, py39, py310
+
+[testenv]
+deps = pytest >= 7.1.1
+commands = pytest
+"""
