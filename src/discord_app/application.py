@@ -6,16 +6,16 @@ import json
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from dataclasses import asdict, dataclass, field
 import logging
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore[attr-defined]
 import requests
 import requests.structures
 import flask
 # Added "type: ignore" so mypy won't complain nacl doesn't have stub or py.typed.
 import nacl.signing     # type: ignore
 import nacl.encoding    # type: ignore
-import nacl.exceptions
+import nacl.exceptions  # type: ignore
 
-from discord_app import user  # type: ignore
+from discord_app import user
 
 from . import discord_types
 from . import interaction
@@ -118,12 +118,12 @@ class Application(discord_types.DiscordDataClass):
                     )
 
                 # Request signature verification
-                verifier = nacl.signing.VerifyKey(self._public_key, nacl.encoding.HexEncoder)
+                verifier = nacl.signing.VerifyKey(self._public_key.encode("ascii"), nacl.encoding.HexEncoder)  # type: ignore[union-attr]
                 verified = False
                 try:
                     verifier.verify(
                         flask.request.headers["X-Signature-Timestamp"].encode("utf-8") + flask.request.data,
-                        nacl.encoding.HexEncoder.decode(flask.request.headers["X-Signature-Ed25519"])
+                        nacl.encoding.HexEncoder.decode(flask.request.headers["X-Signature-Ed25519"].encode("ascii"))
                     )
                     verified = True
                 except nacl.exceptions.BadSignatureError:

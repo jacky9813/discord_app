@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union, Any
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore[attr-defined]
 
 from . import discord_types
 from . import channel
@@ -92,9 +92,9 @@ class InteractionResponseData(discord_types.DiscordDataClass):
         if "title" in kwargs or "custom_id" in kwargs:
             target = InteractionResponseModal
         if cls is InteractionResponseData:
-            return super(InteractionResponseData, target).__new__(target, *args, **kwargs)  # type: ignore[misc, no-any-return]
+            return super(InteractionResponseData, target).__new__(target, *args, **kwargs)  # type: ignore[call-arg, no-any-return]
         else:
-            return super(InteractionResponseData, cls).__new__(cls)  # type: ignore[return-value]
+            return super(InteractionResponseData, cls).__new__(cls)  # type: ignore[no-any-return]
 
 
 @dataclass

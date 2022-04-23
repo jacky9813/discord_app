@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from typing import List, Optional, Any, Union
-from typing_extensions import Self
+from typing_extensions import Self  # type: ignore[attr-defined]
 
 from . import guild
 from . import discord_types
@@ -243,7 +243,7 @@ class MessageComponent(discord_types.DiscordDataClass):
         if cls is MessageComponent:
             return super(MessageComponent, target).__new__(target)  # type: ignore[misc, no-any-return]
         else:
-            return super(MessageComponent, cls).__new__(cls, *args, **kwargs)  # type: ignore[return-value]
+            return super(MessageComponent, cls).__new__(cls, *args, **kwargs)  # type: ignore[no-any-return, call-arg]
 
 
 @dataclass
