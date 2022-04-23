@@ -15,8 +15,6 @@ repository = "https://github.com/jacky9813/discord_app"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "License :: OSI Approved :: MIT License",
@@ -24,7 +22,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4"
+python = ">=3.9,<4"
 requests = "^2.27.1"
 Flask = "^2.1.1"
 PyNaCl = "^1.4.0"
@@ -62,13 +60,11 @@ no_implicit_reexport = true
 legacy_tox_ini = """
 [tox]
 minversion=3.20.0
-envlist = py37, py38, py39, py310, flake8, mypy
+envlist = py39, py310, flake8, mypy
 isolated_build = true
 
 [gh-actions]
 python = 
-    3.7: py37
-    3.8: py38
     3.9: py39, mypy, flake8
     3.10: py310
 

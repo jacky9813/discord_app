@@ -12,7 +12,7 @@ A [Flask](https://flask.palletsprojects.com/) based Discord Application framewor
 
 ## System Requirements
 
-* Python 3.7+
+* Python 3.9+
 * (Recommended) [virtualenv](https://virtualenv.pypa.io/en/latest/)
 
 ## Install from PyPI
