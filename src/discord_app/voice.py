@@ -22,5 +22,9 @@ class VoiceState(discord_types.DiscordDataClass):
     member: Optional['guild_module.GuildMember'] = None
     self_stream: Optional[bool] = None
 
+    def __post_init__(self) -> None:
+        if isinstance(self.member, dict):
+            self.member = guild_module.GuildMember(**self.member)  # type: ignore[unreachable]
+
 
 PartialVoiceState = VoiceState
