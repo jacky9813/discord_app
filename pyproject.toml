@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "discord_app"
-version = "0.0.1-alpha.0"
+version = "0.0.1-alpha.1"
 description = "Discord Interaction Application framework for Python"
 authors = ["JackyCCC <jacky9813@hotmail.com>"]
 license = "MIT"
