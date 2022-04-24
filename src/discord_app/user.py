@@ -53,3 +53,11 @@ class Connection(discord_types.DiscordDataClass):
     visibility: discord_types.Visibility
     revoked: Optional[bool] = None
     integrations: Optional[List[guild_module.Integration]] = None
+
+    def __post_init__(self) -> None:
+        self.visibility = discord_types.Visibility(self.visibility)
+        if isinstance(self.integrations, list):
+            self.integrations = [
+                guild_module.Integration(**i) if isinstance(i, dict) else i
+                for i in self.integrations
+            ]
