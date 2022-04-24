@@ -58,10 +58,10 @@ class ApplicationCommand(discord_types.DiscordDataClass):
     """
     name: str
     description: str
+    type: discord_types.ApplicationCommandType = discord_types.ApplicationCommandType.CHAT_INPUT
     name_localizations: Optional[Dict[str, str]] = None
     description_localizations: Optional[Dict[str, str]] = None
     id: Optional[discord_types.Snowflake] = None
-    type: Optional[discord_types.ApplicationCommandType] = discord_types.ApplicationCommandType.CHAT_INPUT
     application_id: Optional[discord_types.Snowflake] = None
     guild_id: Optional[discord_types.Snowflake] = None
     options: Optional[List['ApplicationCommandOption']] = None
@@ -73,8 +73,7 @@ class ApplicationCommand(discord_types.DiscordDataClass):
     dm_permission: Optional[Any] = None
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.ApplicationCommandType(self.type)
+        self.type = discord_types.ApplicationCommandType(self.type)
         if isinstance(self.options, list):
             self.options = [ApplicationCommandOption(**option) if isinstance(option, dict) else option for option in self.options]
 
