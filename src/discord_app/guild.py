@@ -329,3 +329,7 @@ class Integration(discord_types.DiscordDataClass):
 class Ban(discord_types.DiscordDataClass):
     reason: str
     user: 'user_module.User'
+
+    def __post_init__(self) -> None:
+        if isinstance(self.user, dict):
+            self.user = user_module.User(**self.user)  # type: ignore[unreachable]
