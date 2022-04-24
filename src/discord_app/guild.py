@@ -136,6 +136,7 @@ class Guild(PartialGuild):
     guild_scheduled_events: Optional[List[guild_scheduled_event.GuildScheduledEvent]] = None
 
     def __post_init__(self) -> None:
+        super().__post_init__()
         self.emojis = [
             emoji.Emoji(**e) if isinstance(e, dict) else e
             for e in self.emojis
@@ -271,6 +272,7 @@ class GuildMember(PartialGuildMember):
     mute: bool = False
 
     def __post_init__(self) -> None:
+        # Parent class didn't define __post_init__ function, no need to execute.
         if isinstance(self.user, dict):
             self.user = user_module.User(**self.user)  # type: ignore[unreachable]
 
