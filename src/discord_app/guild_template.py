@@ -19,3 +19,9 @@ class GuildTemplate(discord_types.DiscordDataClass):
     source_guild_id: discord_types.Snowflake
     serialized_source_guild: guild_module.PartialGuild
     is_dirty: bool
+
+    def __post_init__(self) -> None:
+        if isinstance(self.creator, dict):
+            self.creator = user_module.User(**self.creator)  # type: ignore[unreachable]
+        if isinstance(self.serialized_source_guild, dict):
+            self.serialized_source_guild = guild_module.PartialGuild(**self.serialized_source_guild)  # type: ignore[unreachable]
