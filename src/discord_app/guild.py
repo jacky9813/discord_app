@@ -39,8 +39,8 @@ class Role(discord_types.DiscordDataClass):
     tags: Optional[RoleTags] = None
 
     def __post_init__(self) -> None:
-        if self.tags is not None and isinstance(self.tags, dict):
-            self.tags = RoleTags(**self.tags)
+        if isinstance(self.tags, dict):
+            self.tags = RoleTags(**self.tags)  # type: ignore[unreachable]
 
 
 @dataclass
