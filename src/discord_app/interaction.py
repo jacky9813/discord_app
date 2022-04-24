@@ -161,8 +161,7 @@ class InteractionResponse(discord_types.DiscordDataClass):
     data: Optional[InteractionResponseData] = None
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.InteractionResponseType(self.type)
+        self.type = discord_types.InteractionResponseType(self.type)
         if isinstance(self.data, dict):
             # TODO: The corresponding data may related to the response type. But I'm not sure if deciding data type here is a good idea.
             DATA_TYPES = {  # type: ignore[unreachable]
@@ -241,8 +240,7 @@ class InteractionDataOption(discord_types.DiscordDataClass):
     focused: Optional[bool] = None
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.ApplicationCommandOptionType(self.type)
+        self.type = discord_types.ApplicationCommandOptionType(self.type)
         if isinstance(self.options, list):
             self.options = [
                 InteractionDataOption(**option) if isinstance(option, dict) else option
@@ -268,8 +266,7 @@ class InteractionData(discord_types.DiscordDataClass):
     components: Optional[List[channel.MessageComponent]] = None
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.ApplicationCommandType(self.type)
+        self.type = discord_types.ApplicationCommandType(self.type)
         if isinstance(self.resolved, dict):
             self.resolved = InteractionResolvedData(**self.resolved)  # type: ignore[unreachable]
         if isinstance(self.options, list):
@@ -314,8 +311,7 @@ class InteractionRequest(discord_types.DiscordDataClass):
     _app: Optional['application.Application'] = None
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.InteractionType(self.type)
+        self.type = discord_types.InteractionType(self.type)
         if isinstance(self.data, dict):  # type: ignore[unreachable]
             self.data = InteractionData(**self.data)  # type: ignore[unreachable]
         if isinstance(self.member, dict):
