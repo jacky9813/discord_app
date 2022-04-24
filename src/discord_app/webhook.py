@@ -20,3 +20,10 @@ class Webhook(discord_types.DiscordDataClass):
     token: Optional[str] = None
     source_guild: Optional[guild_module.PartialGuild] = None
     url: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        self.type = discord_types.WebhookType(self.type)
+        if isinstance(self.user, dict):
+            self.user = user_module.User(**self.user)  # type: ignore[unreachable]
+        if isinstance(self.source_guild, dict):
+            self.source_guild = guild_module.PartialGuild(**self.source_guild)  # type: ignore[unreachable]
