@@ -27,7 +27,7 @@ class ApplicationCommandOption(discord_types.DiscordDataClass):
     """
     name: str
     description: str
-    type: Optional[discord_types.ApplicationCommandOptionType] = discord_types.ApplicationCommandOptionType.SUB_COMMAND
+    type: discord_types.ApplicationCommandOptionType = discord_types.ApplicationCommandOptionType.SUB_COMMAND
     name_localizations: Optional[Dict[str, str]] = None
     description_localizations: Optional[Dict[str, str]] = None
     required: Optional[bool] = False
@@ -39,8 +39,7 @@ class ApplicationCommandOption(discord_types.DiscordDataClass):
     autocomplete: Optional[bool] = False
 
     def __post_init__(self) -> None:
-        if isinstance(self.type, int):
-            self.type = discord_types.ApplicationCommandOptionType(self.type)
+        self.type = discord_types.ApplicationCommandOptionType(self.type)
         if isinstance(self.choices, list):
             self.choices = [ApplicationCommandOptionChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
         if isinstance(self.options, list):
