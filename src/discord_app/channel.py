@@ -242,9 +242,9 @@ class MessageComponent(discord_types.DiscordDataClass):
         }
         target = CLASS_MAP[kwargs['type']]
         if cls is MessageComponent:
-            return super(MessageComponent, target).__new__(target)  # type: ignore[misc, no-any-return]
+            return target(*args, **kwargs)  # type: ignore[no-any-return]
         else:
-            return super(MessageComponent, cls).__new__(cls, *args, **kwargs)  # type: ignore[return-value]
+            return super(MessageComponent, cls).__new__(cls)  # type: ignore[return-value]
 
 
 @dataclass
