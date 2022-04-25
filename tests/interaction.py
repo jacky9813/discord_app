@@ -2,6 +2,7 @@
 import discord_app.interaction
 import discord_app.application
 import discord_app.discord_types
+import discord_app.channel
 
 import dataclasses
 
@@ -121,3 +122,26 @@ def test_command_2() -> None:
 
     assert a == b
     assert a != c
+
+
+def test_create_from_parent_class() -> None:
+    a = discord_app.interaction.InteractionResponseData(
+        content="test"
+    )
+    assert isinstance(a, discord_app.interaction.InteractionResponseMessage)
+    assert isinstance(a, discord_app.interaction.InteractionResponseData)
+
+    b = discord_app.interaction.InteractionResponseModal(
+        custom_id="test_id",
+        title="Test title",
+        components=[
+            discord_app.channel.MessageComponentButton(
+                style=discord_app.discord_types.MessageComponentButtonStyle.PRIMARY,
+                label="Test",
+                custom_id="btn_test_id",
+                type=discord_app.discord_types.MessageComponentType.BUTTON
+            )
+        ]
+    )
+    assert isinstance(b, discord_app.interaction.InteractionResponseModal)
+    assert isinstance(b, discord_app.interaction.InteractionResponseData)
