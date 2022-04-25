@@ -135,7 +135,7 @@ def test_create_from_parent_class() -> None:
         custom_id="test_id",
         title="Test title",
         components=[
-            discord_app.channel.MessageComponentButton(
+            discord_app.channel.MessageComponent(
                 style=discord_app.discord_types.MessageComponentButtonStyle.PRIMARY,
                 label="Test",
                 custom_id="btn_test_id",
@@ -145,3 +145,15 @@ def test_create_from_parent_class() -> None:
     )
     assert isinstance(b, discord_app.interaction.InteractionResponseModal)
     assert isinstance(b, discord_app.interaction.InteractionResponseData)
+
+    c = discord_app.interaction.InteractionResponseData(
+        choices=[
+            discord_app.interaction.ApplicationCommandOptionChoice(name="choice_1", value="value_1"),
+            discord_app.interaction.ApplicationCommandOptionChoice(name="choice_2", value="value_2"),
+            discord_app.interaction.ApplicationCommandOptionChoice(name="choice_3", value="value_3"),
+            discord_app.interaction.ApplicationCommandOptionChoice(name="choice_4", value="value_4")
+        ]
+    )
+
+    assert isinstance(c, discord_app.interaction.InteractionResponseAutocomplete)
+    assert isinstance(c, discord_app.interaction.InteractionResponseData)
