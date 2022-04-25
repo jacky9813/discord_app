@@ -285,9 +285,17 @@ class Application(discord_types.DiscordDataClass):
         if data and json:
             raise RuntimeError("body and json are specified at the same time")
         if data:
-            kwargs["data"] = data
+            if isinstance(data, discord_types.DiscordDataClass):
+                kwargs["json"] = asdict(data, dict_factory=asdict_ignore_none)
+                if "Content-Type" not in kwargs["headers"]:
+                    kwargs["headers"]["Content-Type"] = "application/json"
+            else:
+                kwargs["data"] = data
         if json:
-            kwargs["json"] = json
+            if isinstance(json, discord_types.DiscordDataClass):
+                kwargs["json"] = asdict(json, dict_factory=asdict_ignore_none)
+            else:
+                kwargs["json"] = json
             if "Content-Type" not in kwargs["headers"]:
                 kwargs["headers"]["Content-Type"] = "application/json"
         response = requests.request(**kwargs)
