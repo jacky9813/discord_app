@@ -321,7 +321,7 @@ class InteractionRequest(discord_types.DiscordDataClass):
         if isinstance(self.message, dict):
             self.message = channel.Message(**self.message)  # type: ignore[unreachable]
 
-    def get_channel(self) -> Optional[channel.Channel]:
+    def get_channel(self) -> channel.Channel:
         if self.channel_id and self._app:
             channel_data, _ = self._app.call_api(  # type: ignore[misc]
                 "GET",
@@ -329,4 +329,4 @@ class InteractionRequest(discord_types.DiscordDataClass):
             )
             return channel.Channel(**channel_data)
         else:
-            return None
+            raise RuntimeError("self._app is unusable.")
