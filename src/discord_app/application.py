@@ -6,7 +6,6 @@ import json
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from dataclasses import asdict, dataclass, field
 import logging
-from typing_extensions import Self  # type: ignore[attr-defined]
 import requests
 import requests.structures
 import flask
