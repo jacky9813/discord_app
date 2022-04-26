@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from typing import List, Optional, Any, Union
-from typing_extensions import Self  # type: ignore[attr-defined]
+from typing_extensions import Self
 
 from . import guild
 from . import discord_types
@@ -82,6 +82,9 @@ class Channel(discord_types.DiscordDataClass):
     permissions: Optional[str] = None
     flags: Optional[discord_types.ChannelFlag] = None
 
+    # This is for api calls.
+    _app: Optional['application_module.Application'] = None
+
     def __post_init__(self) -> None:
         if isinstance(self.recipients, list):
             self.recipients = [user_module.User(**u) if isinstance(u, dict) else u for u in self.recipients]
@@ -98,6 +101,69 @@ class Channel(discord_types.DiscordDataClass):
                 Overwrite(**overwrite) if isinstance(overwrite, dict) else overwrite
                 for overwrite in self.permission_overwrites
             ]
+
+    @property
+    def _is_text_channel(self) -> bool:
+        return self.type not in [
+            discord_types.ChannelType.GUILD_VOICE,
+            discord_types.ChannelType.GUILD_CATEGORY,
+            discord_types.ChannelType.GUILD_STAGE_VOICE,
+            discord_types.ChannelType.GUILD_DIRECTORY
+        ]
+
+    def post_message(
+        self,
+        *args: Any,
+        content: Optional[str] = None,
+        tts: Optional[bool] = None,
+        embeds: Optional[List['Embed']] = None,
+        embed: Optional['Embed'] = None,  # Deprecated
+        allowed_mentions: Optional[AllowedMentions] = None,
+        message_reference: Optional['MessageReference'] = None,
+        components: Optional[List['MessageComponent']] = None,
+        sticker_ids: Optional[List[discord_types.Snowflake]] = None,
+        attachments: Optional[List['PartialAttachment']] = None,
+        flags: Optional[discord_types.MessageFlags] = None
+    ) -> 'Message':
+        """
+            Post a new message.
+
+            Attachments is not supported.
+        """
+        kwargs: Any = locals()
+        if attachments:
+            raise NotImplementedError("Posting message with attachment is not supported yet.")
+        if not self._is_text_channel:
+            raise ValueError("Unable to post message: channel is not a text channel")
+        if isinstance(self._app, application_module.Application) and self._app._is_authorized:
+            msg_dict = {}
+            INCLUDED_KEY = [
+                "content",
+                "tts",
+                "embeds",
+                "embed",
+                "allowed_mentions",
+                "message_reference",
+                "components",
+                "sticker_ids",
+                "attachments",
+                "flags"
+            ]
+            if len(args) > 0 and isinstance(args[0], Message):
+                kwargs = args[0]
+            else:
+                keys = kwargs.keys()
+                for key in keys:
+                    if kwargs[key] and key in INCLUDED_KEY:
+                        msg_dict[key] = kwargs[key]
+            msg_json, _ = self._app.call_api(
+                "POST",
+                f"/channels/{self.id}/messages",
+                json=msg_dict
+            )
+            return Message(_app=self._app, **msg_json)
+        else:
+            raise RuntimeError("Unable to post message: application is not authorized.")
 
 
 PartialChannel = Channel
@@ -403,6 +469,13 @@ class Message(discord_types.DiscordDataClass):
     sticker_items: Optional[List[sticker.StickerItem]] = None
     stickers: Optional[List[sticker.Sticker]] = None
 
+    # These are undocumented attributes
+    pinned: Optional[Any] = None
+
+    # These are for application use.
+    _app: Optional['application_module.Application'] = None
+    _valid: bool = True
+
     def __post_init__(self) -> None:
         self.mentions = [
             user_module.User(**u) if isinstance(u, dict) else u
@@ -462,6 +535,71 @@ class Message(discord_types.DiscordDataClass):
                 sticker.Sticker(**stkr) if isinstance(stkr, dict) else stkr
                 for stkr in self.stickers  # name as stkr due to imported mudule name also called sticker
             ]
+
+    def delete(self) -> None:
+        """
+            Detele this message.
+
+            This will also mark this message as invalid.
+        """
+        if not self._valid:
+            raise RuntimeError("Not a valid message. (Could be deleted already)")
+        if self._app is not None and self._app._is_authorized and self._valid:
+            self._app.call_api(
+                "DELETE",
+                f"/channels/{self.channel_id}/messages/{self.id}"
+            )
+            self._valid = False
+
+    def edit(
+        self,
+        content: Optional[str] = None,
+        embeds: Optional[List[Embed]] = None,
+        embed: Optional[Embed] = None,
+        flags: Optional[discord_types.MessageFlags] = None,
+        allowed_mentions: Optional[AllowedMentions] = None,
+        components: Optional[List[MessageComponent]] = None,
+        attachments: Optional[List[Attachment]] = None
+    ) -> None:
+        """
+            Change the content of the message.
+        """
+        kwargs = locals()
+        if not self._valid:
+            raise RuntimeError("Not a valid message. (Could be deleted already.)")
+        ALLOWED_ARGS = [
+            "content",
+            "embeds",
+            "embed",
+            "flags",
+            "allowed_mentions",
+            "components",
+            "attachments"
+        ]
+        if self._app is not None and self._app._is_authorized and self._valid:
+            msg_dict = {}
+            for key in ALLOWED_ARGS:
+                if key in kwargs and bool(kwargs[key]):
+                    msg_dict[key] = kwargs[key]
+            msg_json, _ = self._app.call_api(
+                "PATCH",
+                f"/channels/{self.channel_id}/messages/{self.id}",
+                json=msg_dict
+            )
+            new_msg = Message(_app=self._app, **msg_json)
+            self.__dict__.update(new_msg.__dict__)
+
+    def get_channel(self) -> Channel:
+        """
+            Get Channel object where this message is in.
+        """
+        if self._app is None:
+            raise RuntimeError("self._app not found")
+        chn_info, _ = self._app.call_api(
+            "GET",
+            f"/channels/{self.channel_id}"
+        )
+        return Channel(_app=self._app, **chn_info)
 
 
 @dataclass
