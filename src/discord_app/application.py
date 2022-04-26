@@ -269,7 +269,7 @@ class Application(discord_types.DiscordDataClass):
         data: Optional[bytes] = None,
         json: Optional[object] = None,
         use_bot_token: bool = True
-    ) -> Optional[Tuple[Any, requests.Response]]:
+    ) -> Tuple[Any, requests.Response]:
         if headers is None:
             headers = requests.structures.CaseInsensitiveDict()
         if isinstance(headers, dict):
