@@ -34,3 +34,4 @@ jobs:
           DISCORD_APP_CLIENT_SECRET: ${{ secrets.DISCORD_APP_CLIENT_SECRET }}
           DISCORD_APP_ID: ${{ secrets.DISCORD_APP_ID }}
           DISCORD_APP_PUBLIC_KEY: ${{ secrets.DISCORD_APP_PUBLIC_KEY }}
+          DISCORD_TEST_TEXT_CHANNEL: $${{ secrets.DISCORD_TEST_TEXT_CHANNEL }}
