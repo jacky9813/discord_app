@@ -79,7 +79,6 @@ class Application(discord_types.DiscordDataClass):
     type: Optional[Any] = None
     hook: Optional[bool] = None
 
-    _public_key: Optional[str] = None
     _client_secret: Optional[str] = None
     _bot_token: Optional[str] = None
     _endpoint: Optional[str] = None
@@ -95,7 +94,7 @@ class Application(discord_types.DiscordDataClass):
         if isinstance(self.install_params, dict):
             self.install_params = InstallParams(**self.install_params)  # type: ignore[unreachable]
 
-        if self._public_key is not None and self._bot_token is not None:
+        if self.verify_key is not None and self._bot_token is not None:
             # Initializing flask
             self._flask: flask.Flask = flask.Flask(self.name)
             self._logger: logging.Logger = self._flask.logger if self._logger is None else self._logger
@@ -118,7 +117,7 @@ class Application(discord_types.DiscordDataClass):
                     )
 
                 # Request signature verification
-                verifier = nacl.signing.VerifyKey(self._public_key.encode("ascii"), nacl.encoding.HexEncoder)  # type: ignore[union-attr]
+                verifier = nacl.signing.VerifyKey(self.verify_key.encode("ascii"), nacl.encoding.HexEncoder)  # type: ignore[union-attr]
                 verified = False
                 try:
                     verifier.verify(
@@ -259,7 +258,7 @@ class Application(discord_types.DiscordDataClass):
 
     @property
     def _is_authorized(self) -> bool:
-        return bool(self._bot_token and self._public_key)
+        return bool(self._bot_token and self.verify_key)
 
     def call_api(
         self,
@@ -385,7 +384,6 @@ class Application(discord_types.DiscordDataClass):
     def from_basic_data(
         cls,
         id: discord_types.Snowflake,
-        public_key: str,
         bot_token: str,
         endpoint: str = "/"
     ) -> Self:  # type: ignore[valid-type]
@@ -401,7 +399,6 @@ class Application(discord_types.DiscordDataClass):
         if app_obj['id'] == id:
             return cls(
                 _bot_token=bot_token,
-                _public_key=public_key,
                 _endpoint=endpoint,
                 **app_obj
             )
