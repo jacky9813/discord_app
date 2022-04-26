@@ -75,7 +75,6 @@ def whoami(request: discord_app.InteractionRequest) -> discord_app.InteractionRe
     )
 
 
-
 @app.application_command(discord_app.ApplicationCommand(**{
     "name": "new_command",
     "type": discord_app.ApplicationCommandType.CHAT_INPUT,
@@ -157,6 +156,7 @@ def appcmd_about_app(_: discord_app.InteractionRequest) -> discord_app.Interacti
             )
         )
     )
+
 
 app.run(
     host="127.0.0.1",
