@@ -386,7 +386,7 @@ class Application(discord_types.DiscordDataClass):
         id: discord_types.Snowflake,
         bot_token: str,
         endpoint: str = "/"
-    ) -> Self:  # type: ignore[valid-type]
+    ) -> 'Application':  # type: ignore[valid-type]
         appinfo_response = requests.request(
             "GET",
             "https://discord.com/api/v8/oauth2/applications/@me",
