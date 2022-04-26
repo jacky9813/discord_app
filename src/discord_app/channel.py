@@ -1,7 +1,6 @@
 
 from dataclasses import dataclass
 from typing import List, Optional, Any, Union
-from typing_extensions import Self
 
 from . import guild
 from . import discord_types
@@ -461,8 +460,7 @@ class Message(discord_types.DiscordDataClass):
     application_id: Optional[discord_types.Snowflake] = None
     message_reference: Optional[MessageReference] = None
     flags: Optional[discord_types.MessageFlags] = None
-    # Make mypy ignore "Self if not a type" error
-    referenced_message: Optional[Self] = None  # type: ignore
+    referenced_message: Optional['Message'] = None
     interaction: Optional[MessageInteraction] = None
     thread: Optional[channel.Channel] = None
     components: Optional[List[MessageComponent]] = None
