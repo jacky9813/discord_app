@@ -327,6 +327,6 @@ class InteractionRequest(discord_types.DiscordDataClass):
                 "GET",
                 f"/channels/{self.channel_id}"
             )
-            return channel.Channel(**channel_data)
+            return channel.Channel(_app=self._app, **channel_data)
         else:
             raise RuntimeError("self._app is unusable.")
