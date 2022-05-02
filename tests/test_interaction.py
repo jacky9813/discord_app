@@ -50,7 +50,7 @@ def test_command_1() -> None:
     }
 
     a = discord_app.interaction.ApplicationCommand(**spec)  # type: ignore[arg-type]
-    b = dataclasses.asdict(a, dict_factory=discord_app.application.asdict_ignore_none)
+    b = dataclasses.asdict(a, dict_factory=discord_app.application._asdict_ignore_none)
     c = discord_app.interaction.ApplicationCommand(**b)
 
     assert a == c
