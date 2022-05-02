@@ -11,6 +11,8 @@ from . import sticker
 from . import stage_instance
 from . import guild_scheduled_event
 from . import presence
+from . import application
+from . import webhook
 
 
 @dataclass
@@ -135,6 +137,8 @@ class Guild(PartialGuild):
     stickers: Optional[List[sticker.Sticker]] = None
     guild_scheduled_events: Optional[List[guild_scheduled_event.GuildScheduledEvent]] = None
 
+    _app: Optional['application.Application'] = None
+
     def __post_init__(self) -> None:
         super().__post_init__()
         self.emojis = [
@@ -186,6 +190,18 @@ class Guild(PartialGuild):
                 presence.PresenceUpdateEvent(**p) if isinstance(p, dict) else p
                 for p in self.presences
             ]
+
+    def list_webhooks(self) -> List['webhook.Webhook']:
+        """
+        Get a list of webhooks that binded to this guild.
+        """
+        if self._app is None or not self._app._is_authorized:
+            raise RuntimeError("Unable to create Webhook: application is not authorized.")
+        list_wh, _ = self._app.call_api(
+            "GET",
+            f"/guilds/{self.id}/webhooks"
+        )
+        return [webhook.Webhook(_app=self._app, **wh) for wh in list_wh]
 
 
 @dataclass

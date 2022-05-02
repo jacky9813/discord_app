@@ -9,6 +9,7 @@ from . import emoji as emoji_module
 from . import channel
 from . import sticker
 from . import application as application_module
+from . import webhook
 
 
 @dataclass
@@ -163,6 +164,43 @@ class Channel(discord_types.DiscordDataClass):
             return Message(_app=self._app, **msg_json)
         else:
             raise RuntimeError("Unable to post message: application is not authorized.")
+
+    def create_webhook(self, name: str, avatar: Optional[str] = None) -> 'webhook.Webhook':
+        """
+        Create a webhook endpoint.
+
+        :param str name: The display name of the webhook. The name can be up to 80 characters but cannot contain "clyde" substring (case-insensitive).
+        :param Optional[str] avatar: An image data using Data URI scheme. For example: "data:image/png;base64,BASE64_ENCODED_PNG_IMAGE_DATA"
+        :return: The webhook object.
+        :rtype: `webhook.Webhook`
+        :raises RuntimeError: if the application is None or the application is not authorized.
+        """
+        if self._app is None or not self._app._is_authorized:
+            raise RuntimeError("Unable to create Webhook: application is not authorized.")
+        webhook._webhook_name_test(name)
+        req_body = {
+            "name": name
+        }
+        if avatar:
+            req_body["avatar"] = avatar
+        resp_json, _ = self._app.call_api(
+            "POST",
+            f"/channels/{self.id}/webhooks",
+            json=req_body
+        )
+        return webhook.Webhook(_app=self._app, **resp_json)
+
+    def list_webhooks(self) -> List['webhook.Webhook']:
+        """
+        Get a list of webhooks that binded to this channel
+        """
+        if self._app is None or not self._app._is_authorized:
+            raise RuntimeError("Unable to create Webhook: application is not authorized.")
+        list_wh, _ = self._app.call_api(
+            "GET",
+            f"/channels/{self.id}/webhooks"
+        )
+        return [webhook.Webhook(_app=self._app, **wh) for wh in list_wh]
 
 
 PartialChannel = Channel
