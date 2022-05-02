@@ -2,7 +2,7 @@
 from os import environ as ENV
 
 from discord_app import channel
-from application import app
+from test_application import app
 
 
 def test_channel_post_message() -> None:
@@ -22,6 +22,6 @@ def test_channel_post_message() -> None:
 
     assert msg._valid is False
 
-    msg_chn = msg.get_channel()
+    msg_chn = msg.get_channel()  # type: ignore[unreachable]
 
     assert msg_chn.id == channel_id
