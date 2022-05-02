@@ -13,10 +13,12 @@ def test_channel_post_message() -> None:
         content="Test content 1"
     )
     assert isinstance(msg, channel.Message)
+    assert msg.content == "Test content 1"
 
     msg.edit(content="Changed content test.")
 
     assert msg._valid
+    assert msg.content == "Changed content test."
 
     msg.delete()
 
