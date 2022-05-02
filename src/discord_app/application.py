@@ -20,7 +20,10 @@ from . import discord_types
 from . import interaction
 
 
-def asdict_ignore_none(x: List[Tuple[str, Any]]) -> Dict[str, Any]:
+def _asdict_ignore_none(x: List[Tuple[str, Any]]) -> Dict[str, Any]:
+    """
+        Use with dataclasses.asdict function. Ignores all None data and any property with a underscore as the first character of its name.
+    """
     def condition(k: str, v: Any) -> bool:
         return (v is not None) and\
             (v) and \
@@ -33,8 +36,11 @@ def _flask_response_from_interaction(
     headers: Dict[str, str] = {},
     status: int = 200
 ) -> flask.Response:
+    """
+        Convert InteractionResponse object into flask.Response object
+    """
     return flask.Response(
-        response=json.dumps(asdict(response, dict_factory=asdict_ignore_none)),
+        response=json.dumps(asdict(response, dict_factory=_asdict_ignore_none)),
         headers=headers,
         status=status,
         mimetype="application/json"
@@ -284,14 +290,14 @@ class Application(discord_types.DiscordDataClass):
             raise RuntimeError("body and json are specified at the same time")
         if data:
             if isinstance(data, discord_types.DiscordDataClass):
-                kwargs["json"] = asdict(data, dict_factory=asdict_ignore_none)
+                kwargs["json"] = asdict(data, dict_factory=_asdict_ignore_none)
                 if "Content-Type" not in kwargs["headers"]:
                     kwargs["headers"]["Content-Type"] = "application/json"
             else:
                 kwargs["data"] = data
         if json:
             if isinstance(json, discord_types.DiscordDataClass):
-                kwargs["json"] = asdict(json, dict_factory=asdict_ignore_none)
+                kwargs["json"] = asdict(json, dict_factory=_asdict_ignore_none)
             else:
                 kwargs["json"] = json
             if "Content-Type" not in kwargs["headers"]:
@@ -344,8 +350,8 @@ class Application(discord_types.DiscordDataClass):
                 # Is a registered command, detect if command spec has changed.
                 prev_option = interaction.ApplicationCommand(**prev_option)
                 new_options = interaction.ApplicationCommand(**(
-                    asdict(prev_option, dict_factory=asdict_ignore_none) |
-                    asdict(options, dict_factory=asdict_ignore_none)))
+                    asdict(prev_option, dict_factory=_asdict_ignore_none) |
+                    asdict(options, dict_factory=_asdict_ignore_none)))
                 same_command_spec = (new_options == prev_option)
             if not same_command_spec:
                 if prev_option is None:
@@ -354,7 +360,7 @@ class Application(discord_types.DiscordDataClass):
                         method="POST",
                         path=f"/applications/{self.id}/commands",
                         headers={"Content-Type": "application/json"},
-                        json=asdict(options, dict_factory=asdict_ignore_none)
+                        json=asdict(options, dict_factory=_asdict_ignore_none)
                     )
                     self._logger.info(f"Registration retruned with status code {response.status_code}")  # type: ignore[union-attr]
                 else:
@@ -367,7 +373,7 @@ class Application(discord_types.DiscordDataClass):
                             method="PATCH",
                             path=f"/applications/{self.id}/commands/{prev_option.id}",
                             headers={"Content-Type": "application/json"},
-                            json=asdict(options, dict_factory=asdict_ignore_none)
+                            json=asdict(options, dict_factory=_asdict_ignore_none)
                         )
                         self._logger.info(f"Registration retruned with status code {response.status_code}")  # type: ignore[union-attr]
             return function
