@@ -38,7 +38,7 @@ types-requests = "^2.27.20"
 [tool.pytest.ini_options]
 addopts = "--cov=src/discord_app"
 testpaths = [
-    "tests/all.py",
+    "tests",
 ]
 
 [tool.mypy]
